@@ -72,8 +72,10 @@ class Robot(Thread):
 		self.y = random.randint(10, 710)
 		self.size = (10, 10)
 
-		self.speed_x = 0.5
-		self.speed_y = 0.5
+		self.dest_x = self.x
+		self.dest_y = self.y
+		self.speed_x = 0
+		self.speed_y = 0
 
 		self.transmitter = PositionTransmitter(self.id, self.get_pos_msg)
 		self.receiver = Receiver(self.parse_pos_msg)
@@ -104,13 +106,43 @@ class Robot(Thread):
 			self.robots_count = new_len
 	
 	def calculate_dest(self):
-		print("New destination : ")
-		pass
+		count_robot = len(self.robots_positions)
+		if count_robot == 0:
+			return
+		
+		# Calculating the average position of all robots.
+		avg_x = sum([pos[0] for pos in self.robots_positions.values()]) / count_robot
+		avg_y = sum([pos[1] for pos in self.robots_positions.values()]) / count_robot
+
+		# Calculating the vector from the robot to the average position.
+		vector_x = avg_x - self.x
+		vector_y = avg_y - self.y
+
+		# Calculating the norm of the vector.
+		norm = (vector_x ** 2 + vector_y ** 2) ** 0.5
+
+		# Calculating the unit vector.
+		unit_vector_x = vector_x / norm
+		unit_vector_y = vector_y / norm
+
+		# Calculating the destination.
+		self.dest_x = self.x + unit_vector_x * 100
+		self.dest_y = self.y + unit_vector_y * 100
+
+		# Calculating the speed.
+		self.speed_x = unit_vector_x * 1.5
+		self.speed_y = unit_vector_y * 1.5
 
 	def run(self):
 		while self.running:
 			self.x += self.speed_x
 			self.y += self.speed_y
+
+			if self.x == self.dest_x:
+				self.speed_x = 0
+			if self.y == self.dest_y:
+				self.speed_y = 0
+
 			time.sleep(DELTA)
 	
 	def start_robot(self):

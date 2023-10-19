@@ -80,4 +80,4 @@ while running:
 receiver.running = False
 receiver.join()
 
-pygame.close()
+pygame.quit()
