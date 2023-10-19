@@ -110,6 +110,10 @@ class Robot(Thread):
 		if count_robot == 0:
 			return
 		
+		# TODO redo the destination calculation.
+		# A line needs to be calculated from the robots positions.
+		# The robots then need to go on the closest point of the line from their respective positions.
+		
 		# Calculating the average position of all robots.
 		avg_x = sum([pos[0] for pos in self.robots_positions.values()]) / count_robot
 		avg_y = sum([pos[1] for pos in self.robots_positions.values()]) / count_robot
