@@ -114,26 +114,20 @@ class Robot(Thread):
 		# A line needs to be calculated from the robots positions.
 		# The robots then need to go on the closest point of the line from their respective positions.
 		
-		# Calculating the average position of all robots.
 		avg_x = sum([pos[0] for pos in self.robots_positions.values()]) / count_robot
 		avg_y = sum([pos[1] for pos in self.robots_positions.values()]) / count_robot
 
-		# Calculating the vector from the robot to the average position.
 		vector_x = avg_x - self.x
 		vector_y = avg_y - self.y
 
-		# Calculating the norm of the vector.
 		norm = (vector_x ** 2 + vector_y ** 2) ** 0.5
 
-		# Calculating the unit vector.
 		unit_vector_x = vector_x / norm
 		unit_vector_y = vector_y / norm
 
-		# Calculating the destination.
 		self.dest_x = self.x + unit_vector_x * 100
 		self.dest_y = self.y + unit_vector_y * 100
 
-		# Calculating the speed.
 		self.speed_x = unit_vector_x * 1.5
 		self.speed_y = unit_vector_y * 1.5
 
